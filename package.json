@@ -1,0 +1,33 @@
+{
+	"name": "express-api-template",
+	"description": "A base API template for a REST API using express, prisma and redis, deployed with docker.",
+	"author": "T3NED <software@t3ned.com>",
+	"license": "Apache-2.0",
+	"main": "dist/app.js",
+	"version": "1.0.0",
+	"private": true,
+	"engines": {
+		"pnpm": ">=6.0.0",
+		"node": ">=16.0.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git@github.com:T3NED/express-api-template.git"
+	},
+	"scripts": {
+		"format": "npx prettier --write src",
+		"lint": "npx eslint src --ext js,ts --fix",
+		"build": "npx tsc -b .",
+		"start": "node dist/app.js"
+	},
+	"devDependencies": {
+		"@types/node": "^17.0.35",
+		"@typescript-eslint/eslint-plugin": "^5.26.0",
+		"@typescript-eslint/parser": "^5.26.0",
+		"eslint": "^8.16.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"prettier": "^2.6.2",
+		"typescript": "^4.7.2"
+	}
+}
