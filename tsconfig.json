@@ -42,7 +42,12 @@
 		"noFallthroughCasesInSwitch": true,
 
 		/* Completeness */
-		"skipLibCheck": true
+		"skipLibCheck": true,
+
+		/* Paths */
+		"paths": {
+			"#config/*": ["config/*.ts"]
+		}
 	},
 	"include": ["./src/**/*"]
 }
