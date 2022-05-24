@@ -46,7 +46,8 @@
 
 		/* Paths */
 		"paths": {
-			"#config/*": ["config/*.ts"]
+			"#config/*": ["config/*.ts"],
+			"#constants/*": ["constants/*.ts"]
 		}
 	},
 	"include": ["./src/**/*"]

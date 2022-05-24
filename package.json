@@ -39,6 +39,7 @@
 		"typescript": "^4.7.2"
 	},
 	"_moduleAliases": {
-		"#config": "dist/config"
+		"#config": "dist/config",
+		"#constants": "dist/constants"
 	}
 }
