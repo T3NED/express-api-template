@@ -21,7 +21,8 @@
 		"start": "node dist/app.js"
 	},
 	"dependencies": {
-		"dotenv": "^16.0.1"
+		"dotenv": "^16.0.1",
+		"module-alias": "^2.2.2"
 	},
 	"devDependencies": {
 		"@types/node": "^17.0.35",
