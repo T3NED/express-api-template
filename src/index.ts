@@ -1,4 +1,5 @@
 import "dotenv/config";
+import "module-alias/register";
 
 process.on("uncaughtException", (error) => {
 	// TODO: update to logger once implemented
