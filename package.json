@@ -21,11 +21,13 @@
 		"start": "node dist/app.js"
 	},
 	"dependencies": {
+		"cors": "^2.8.5",
 		"dotenv": "^16.0.1",
 		"express": "^4.18.1",
 		"module-alias": "^2.2.2"
 	},
 	"devDependencies": {
+		"@types/cors": "^2.8.12",
 		"@types/express": "^4.17.13",
 		"@types/node": "^17.0.35",
 		"@typescript-eslint/eslint-plugin": "^5.26.0",
