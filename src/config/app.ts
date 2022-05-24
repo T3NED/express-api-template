@@ -1,7 +1,7 @@
 import { env, envInteger, envPossibles } from "./env/resolvers";
 
-export = {
-	name: env("APP_NAME", true),
-	port: envInteger("APP_PORT", false, 3000),
-	env: envPossibles("APP_ENV", ["production", "development", "staging", "local"], "local"),
-};
+const name = env("APP_NAME", true);
+const port = envInteger("APP_PORT", false, 3000);
+const environment = envPossibles("APP_ENV", ["production", "development", "staging", "local"], "local");
+
+export { name, port, environment };
