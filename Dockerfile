@@ -14,8 +14,5 @@ COPY . ./
 # Build app
 RUN yarn build
 
-# Clean up
-RUN rm tsconfig.json
-
 # Run app
 CMD ["sh", "./start-app.sh"]
