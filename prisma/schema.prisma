@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -11,9 +12,9 @@ datasource db {
 }
 
 model User {
-  id       BigInt @id @db.BigInt
-  username String @db.VarChar(12)
-  bio      String @db.VarChar(255)
+  id       BigInt  @id @db.BigInt
+  username String  @unique @db.VarChar(12)
+  bio      String? @db.VarChar(255)
 
   Posts Post[] @relation("UserPost")
 
