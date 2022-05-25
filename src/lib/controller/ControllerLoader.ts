@@ -2,12 +2,12 @@ import type { ControllerMiddleware, ControllerMiddlewareMetadata } from "./Contr
 import type { ControllerValidateMetadata, ControllerValidationSchema } from "./ControllerValidation";
 import type { ControllerRouteMetadata } from "./ControllerMethods";
 import type { Controller, ControllerRunMethod } from "./Controller";
-import type { AnySchema, ObjectSchema } from "joi";
 
 import { unknownRoute, convertError, handleError } from "#middleware";
+import express, { Express, Request } from "express";
 import { catchServerError, Logger } from "#utils";
+import { ApiError, ApiErrorCode } from "#struct";
 import { HttpStatus } from "#constants/http";
-import express, { Express } from "express";
 import { readdir } from "fs/promises";
 import { join, resolve } from "path";
 import { port } from "#config/app";
@@ -59,6 +59,9 @@ export class ControllerLoader {
 			const routerMethod = Reflect.get(this.app, method.toString().toLowerCase());
 			const routerMiddleware = runMethodToMiddlewareMap[propertyKey] ?? [];
 
+			const validationMiddlewareSchema = validationSchema[propertyKey];
+			const validationMiddleware = this._getValidationSchemaMiddleware(validationMiddlewareSchema);
+
 			const routeHandler = catchServerError(async (req, res) => {
 				const controllerRunMethod = Reflect.get(controller, propertyKey) as ControllerRunMethod;
 				const result = await controllerRunMethod.bind(controller)({ req, res });
@@ -66,7 +69,7 @@ export class ControllerLoader {
 				return res.status(result.status).send(result.data);
 			});
 
-			routerMethod.bind(this.app)(fullRoute, ...routerMiddleware, routeHandler);
+			routerMethod.bind(this.app)(fullRoute, ...routerMiddleware, validationMiddleware, routeHandler);
 
 			Logger.debug(`Loaded ${method} ${fullRoute}`);
 		}
@@ -93,8 +96,10 @@ export class ControllerLoader {
 		}, {} as Record<string, ControllerMiddleware[]>);
 	}
 
-	private _getValidationSchemaMap(validation: ControllerValidateMetadata[] = []): ObjectSchema {
-		const schemas = validation.reduce((map, curr) => {
+	private _getValidationSchemaMap(
+		validation: ControllerValidateMetadata[] = [],
+	): Record<string, ControllerValidationSchema> {
+		return validation.reduce((map, curr) => {
 			if (!map[curr.propertyKey]) map[curr.propertyKey] = {};
 
 			const keys = Object.keys(curr.schema);
@@ -109,14 +114,34 @@ export class ControllerLoader {
 
 			return map;
 		}, {} as Record<string, ControllerValidationSchema>);
+	}
 
-		const entries = Object.entries(schemas);
-		const compiledSchemas = entries.map(([key, schema]) => [
-			key,
-			Joi.compile(schema).prefs({ errors: { label: "key" } }),
-		]);
+	private _getValidationSchemaMiddleware(schema: ControllerValidationSchema) {
+		const keys = Reflect.ownKeys(schema) as (keyof ControllerValidationSchema)[];
 
-		return Object.fromEntries(compiledSchemas);
+		return catchServerError(async (req, res, next) => {
+			const dataToValidate = keys.reduce((obj, key) => {
+				if (Reflect.has(req, key)) obj[key] = req[key];
+				return obj;
+			}, {} as Record<keyof Request, unknown>);
+
+			const { value, error } = Joi.compile(schema)
+				.prefs({ errors: { label: "key" } })
+				.validate(dataToValidate);
+
+			if (error) {
+				const message = error.isJoi ? error.details[0].message : error.message;
+
+				throw new ApiError()
+					.setStatus(HttpStatus.BadRequest)
+					.setCode(ApiErrorCode.BadRequest)
+					.setMessage(message);
+			}
+
+			res.locals = { ...res.locals, ...value };
+
+			return next();
+		});
 	}
 
 	private _applyPreloadMiddleware(): void {
