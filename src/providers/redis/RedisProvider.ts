@@ -1,4 +1,5 @@
 import RedisClient, { Redis } from "ioredis";
+import { username, host, port } from "#config/redis";
 import { Logger } from "#utils";
 
 export class RedisProvider {
@@ -8,7 +9,11 @@ export class RedisProvider {
 	public constructor() {
 		if (RedisProvider.#instance) throw new Error("RedisProvider is a singleton");
 
-		const client = new RedisClient(process.env.REDIS_URI as string);
+		const client = new RedisClient({
+			username,
+			host,
+			port,
+		});
 
 		client.on("connect", () => Logger.info("Connected to redis"));
 		client.on("error", (error) => Logger.error(error));
