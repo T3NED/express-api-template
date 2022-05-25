@@ -42,6 +42,7 @@
 		"#config": "dist/config",
 		"#constants": "dist/constants",
 		"#struct": "dist/struct",
+		"#middleware": "dist/middleware",
 		"#utils": "dist/utils"
 	}
 }

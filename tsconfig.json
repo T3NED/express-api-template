@@ -49,6 +49,7 @@
 			"#config/*": ["config/*.ts"],
 			"#constants/*": ["constants/*.ts"],
 			"#struct": ["struct/index.ts"],
+			"#middleware": ["middleware/index.ts"],
 			"#utils": ["utils/index.ts"]
 		}
 	},
