@@ -1,5 +1,5 @@
 import type { Controller, ControllerConstructor } from "./Controller";
-import type { AnySchema, ObjectSchema } from "joi";
+import type { ObjectSchema } from "joi";
 
 export function Validate(schema: ControllerValidationSchema) {
 	return (controller: Controller, propertyKey: string) => {
@@ -10,16 +10,22 @@ export function Validate(schema: ControllerValidationSchema) {
 	};
 }
 
+export function createValidationDecorator(type: keyof ControllerValidationSchema) {
+	return (schema: ObjectSchema) => Validate({ [type]: schema });
+}
+
+export const Query = createValidationDecorator("query");
+export const Params = createValidationDecorator("params");
+export const Body = createValidationDecorator("body");
+
 export interface ControllerValidateMetadata {
 	controller: ControllerConstructor;
-	schema: AnySchema;
+	schema: ControllerValidationSchema;
 	propertyKey: string;
 }
 
 export interface ControllerValidationSchema {
-	query?: ControllerValidationSchemaObject;
-	params?: ControllerValidationSchemaObject;
-	body?: ControllerValidationSchemaObject;
+	query?: ObjectSchema;
+	params?: ObjectSchema;
+	body?: ObjectSchema;
 }
-
-export type ControllerValidationSchemaObject = ObjectSchema | Record<string, unknown>;
