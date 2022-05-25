@@ -16,6 +16,12 @@ export function makeMethodDecorator(method: ControllerMethod) {
 		};
 }
 
+export const Get = makeMethodDecorator("GET");
+export const Post = makeMethodDecorator("POST");
+export const Put = makeMethodDecorator("PUT");
+export const Delete = makeMethodDecorator("DELETE");
+export const Patch = makeMethodDecorator("PATCH");
+
 export interface ControllerRouteMetadata {
 	controller: ControllerConstructor;
 	version: ControllerVersion;
@@ -23,9 +29,3 @@ export interface ControllerRouteMetadata {
 	route: ControllerRoute;
 	propertyKey: string;
 }
-
-export const Get = makeMethodDecorator("GET");
-export const Post = makeMethodDecorator("POST");
-export const Put = makeMethodDecorator("PUT");
-export const Delete = makeMethodDecorator("DELETE");
-export const Patch = makeMethodDecorator("PATCH");
