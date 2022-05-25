@@ -116,7 +116,7 @@ export class ControllerLoader {
 		}, {} as Record<string, ControllerValidationSchema>);
 	}
 
-	private _getValidationSchemaMiddleware(schema: ControllerValidationSchema) {
+	private _getValidationSchemaMiddleware(schema: ControllerValidationSchema = {}) {
 		const keys = Reflect.ownKeys(schema) as (keyof ControllerValidationSchema)[];
 
 		return catchServerError(async (req, res, next) => {
