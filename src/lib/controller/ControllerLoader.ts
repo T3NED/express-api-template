@@ -1,14 +1,14 @@
+import type { ControllerMiddleware, ControllerMiddlewareMetadata } from "./ControllerMiddleware";
 import type { ControllerRouteMetadata } from "./ControllerMethods";
 import type { Controller, ControllerRunMethod } from "./Controller";
+import { unknownRoute, convertError, handleError } from "#middleware";
 import { catchServerError, Logger } from "#utils";
-import type { Express } from "express";
+import { HttpStatus } from "#constants/http";
+import express, { Express } from "express";
 import { readdir } from "fs/promises";
 import { join, resolve } from "path";
 import { port } from "#config/app";
-import { HttpStatus } from "#constants/http";
-import { unknownRoute, convertError, handleError } from "#middleware";
 import cors from "cors";
-import express from "express";
 
 export class ControllerLoader {
 	public constructor(private app: Express) {}
@@ -39,14 +39,21 @@ export class ControllerLoader {
 		if (!mod?.default) return;
 
 		const controller = new mod.default(this) as Controller;
-		const metadata = Reflect.getMetadata("routes", controller) as ControllerRouteMetadata[];
+		const routes = Reflect.getMetadata("routes", controller) as ControllerRouteMetadata[];
+		const middleware = Reflect.getMetadata("middleware", controller) as ControllerMiddlewareMetadata[];
+		const runMethodToMiddlewareMap = middleware.reduce((map, curr) => {
+			if (!map[curr.propertyKey]) map[curr.propertyKey] = [];
+			map[curr.propertyKey].push(curr.func);
+			return map;
+		}, {} as Record<string, ControllerMiddleware[]>);
 
-		for (const { version, method, route, propertyKey } of metadata) {
+		for (const { version, method, route, propertyKey } of routes) {
 			const v = version ?? controller.defaultVersion;
 			const controllerRoute = controller.baseRoute === "/" ? "" : controller.baseRoute;
 			const fullRoute = `/api/${v}${controllerRoute}${route}`;
 
 			const routerMethod = Reflect.get(this.app, method.toString().toLowerCase());
+			const routerMiddleware = runMethodToMiddlewareMap[propertyKey] ?? [];
 
 			const routeHandler = catchServerError(async (req, res) => {
 				const controllerRunMethod = Reflect.get(controller, propertyKey) as ControllerRunMethod;
@@ -55,7 +62,7 @@ export class ControllerLoader {
 				return res.status(result.status).send(result.data);
 			});
 
-			routerMethod.bind(this.app)(fullRoute, routeHandler);
+			routerMethod.bind(this.app)(fullRoute, ...routerMiddleware, routeHandler);
 
 			Logger.debug(`Loaded ${method} ${fullRoute}`);
 		}
