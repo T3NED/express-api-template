@@ -48,6 +48,7 @@
 		"#struct": "dist/struct",
 		"#lib": "dist/lib",
 		"#middleware": "dist/middleware",
+		"#serializer": "dist/serializer",
 		"#utils": "dist/utils"
 	}
 }
