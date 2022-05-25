@@ -41,6 +41,7 @@
 	"_moduleAliases": {
 		"#config": "dist/config",
 		"#constants": "dist/constants",
-		"#struct": "dist/struct"
+		"#struct": "dist/struct",
+		"#utils": "dist/utils"
 	}
 }
