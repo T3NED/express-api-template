@@ -2,13 +2,12 @@ import type { Request, Response } from "express";
 import { HttpStatus } from "#constants/http";
 
 export abstract class Controller {
-	public options: ControllerOptions;
+	public baseRoute: ControllerRoute;
+	public defaultVersion: ControllerVersion;
 
 	public constructor(options: Partial<ControllerOptions> = {}) {
-		this.options = {
-			baseRoute: options.baseRoute ?? "/",
-			defaultVersion: options.defaultVersion ?? "v1",
-		};
+		this.baseRoute = options.baseRoute ?? "/";
+		this.defaultVersion = options.defaultVersion ?? "v1";
 	}
 
 	protected json(data: ControllerJsonData, status = HttpStatus.Ok): ControllerData {
