@@ -1,5 +1,6 @@
 import "dotenv/config";
 import "module-alias/register";
+import "reflect-metadata";
 
 import { Logger } from "#utils";
 
