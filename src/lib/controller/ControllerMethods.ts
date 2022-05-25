@@ -1,13 +1,10 @@
-import type { Controller } from "./Controller";
-
-export type ControllerMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
-export type ControllerRoute = `/${string}`;
+import type { Controller, ControllerRoute, ControllerMethod, ControllerVersion } from "./Controller";
 
 export function makeMethodDecorator(method: ControllerMethod) {
-	return (route: ControllerRoute = "/") =>
+	return (route: ControllerRoute = "/", version?: ControllerVersion) =>
 		(controller: Controller, propertyKey: string) => {
 			const routes = Reflect.getMetadata("routes", controller) ?? [];
-			routes.push({ controller, method, route, propertyKey });
+			routes.push({ controller, version, method, route, propertyKey });
 
 			Reflect.defineMetadata("routes", routes, controller);
 		};

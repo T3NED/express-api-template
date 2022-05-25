@@ -16,13 +16,17 @@ export abstract class Controller {
 }
 
 export interface ControllerOptions {
-	baseRoute: `/${string}`;
-	defaultVersion: `v${number}`;
+	baseRoute: ControllerRoute;
+	defaultVersion: ControllerVersion;
 }
 
 export interface ControllerData {
 	status: HttpStatus;
 	data: ControllerJsonData;
 }
+
+export type ControllerRoute = `/${string}`;
+export type ControllerVersion = `v${number}`;
+export type ControllerMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export type ControllerJsonData = Record<string | number, unknown> | ControllerJsonData[];
