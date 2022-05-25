@@ -51,7 +51,8 @@
 			"#struct": ["struct/index.ts"],
 			"#lib/*": ["lib/*"],
 			"#middleware": ["middleware/index.ts"],
-			"#serializer": ["serializer/index.ts"],
+			"#serializers": ["serializers/index.ts"],
+			"#providers": ["providers/index.ts"],
 			"#utils": ["utils/index.ts"]
 		}
 	},
