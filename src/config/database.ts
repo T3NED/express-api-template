@@ -1,4 +1,4 @@
-import { env, envInteger } from "./env/resolvers";
+import { env, envInteger } from "#lib/env";
 
 const database = env("POSTGRES_DATABASE", true);
 const username = env("POSTGRES_USERAME", true);

@@ -1,4 +1,4 @@
-import { env, envInteger, envPossibles } from "./env/resolvers";
+import { env, envInteger, envPossibles } from "#lib/env";
 import { environments } from "#constants/app";
 
 const name = env("APP_NAME", true);

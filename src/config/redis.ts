@@ -1,4 +1,4 @@
-import { env, envInteger } from "./env/resolvers";
+import { env, envInteger } from "#lib/env";
 
 const username = env("REDIS_USERAME", true);
 const host = env("REDIS_HOST", true);
