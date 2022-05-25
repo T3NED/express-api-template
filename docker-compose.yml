@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+    api:
+        container_name: api
+        image: api
+        restart: always
+        env_file:
+            - .env
+        ports:
+            - ${APP_PORT}
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                APP_NAME: ${APP_NAME}
+        environment:
+        depends_on:
