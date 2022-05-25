@@ -25,4 +25,4 @@ export interface ControllerData {
 	data: ControllerJsonData;
 }
 
-export type ControllerJsonData = Record<string | number, unknown>;
+export type ControllerJsonData = Record<string | number, unknown> | ControllerJsonData[];
