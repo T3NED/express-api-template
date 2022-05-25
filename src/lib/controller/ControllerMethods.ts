@@ -7,13 +7,7 @@ export function makeMethodDecorator(method: ControllerMethod) {
 	return (route: ControllerRoute = "/") =>
 		(controller: Controller, propertyKey: string) => {
 			const routes = Reflect.getMetadata("routes", controller) ?? [];
-
-			routes.push({
-				method,
-				route,
-				controller,
-				propertyKey,
-			});
+			routes.push({ controller, method, route, propertyKey });
 
 			Reflect.defineMetadata("routes", routes, controller);
 		};
