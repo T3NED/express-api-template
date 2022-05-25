@@ -1,9 +1,10 @@
 import "./index";
 
+import { convertError, handleError, unknownRoute } from "#middleware";
 import { HttpStatus } from "#constants/http";
-import { convertError, handleError } from "#middleware";
 import { Logger } from "#utils";
 import { port } from "#config/app";
+
 import express from "express";
 import cors from "cors";
 
@@ -17,6 +18,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/v1", v1);
+
+app.use(unknownRoute);
 
 app.use(convertError);
 app.use(handleError);
