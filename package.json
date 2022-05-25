@@ -39,6 +39,7 @@
 	},
 	"_moduleAliases": {
 		"#config": "dist/config",
-		"#constants": "dist/constants"
+		"#constants": "dist/constants",
+		"#struct": "dist/struct"
 	}
 }
