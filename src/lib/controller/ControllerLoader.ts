@@ -9,10 +9,10 @@ import { catchServerError, Logger } from "#utils";
 import { ApiError, ApiErrorCode } from "#struct";
 import { HttpStatus } from "#constants/http";
 import { readdir } from "fs/promises";
-import { join, resolve } from "path";
 import { port } from "#config/app";
-import Joi from "joi";
+import { join } from "path";
 import cors from "cors";
+import Joi from "joi";
 
 export class ControllerLoader {
 	public constructor(private app: Express) {}
@@ -29,9 +29,8 @@ export class ControllerLoader {
 	private async loadAll(): Promise<void> {
 		Logger.debug("Loading controllers...");
 
-		const directory = join(__dirname, "..", "..", "controllers");
+		const path = join(__dirname, "..", "..", "controllers");
 
-		const path = resolve(directory);
 		for await (const file of this._recursiveReaddir(path)) {
 			if (file.endsWith(".map")) continue;
 			await this._load(`${path}/${file}`);
@@ -77,9 +76,7 @@ export class ControllerLoader {
 		Logger.info("Successfully loaded controllers");
 	}
 
-	private async *_recursiveReaddir(directory: string): AsyncIterableIterator<string> {
-		const path = resolve(directory);
-
+	private async *_recursiveReaddir(path: string): AsyncIterableIterator<string> {
 		for (const file of await readdir(path, { withFileTypes: true })) {
 			if (file.isDirectory()) yield* this._recursiveReaddir(`${path}/${file.name}`);
 			else yield file.name;
