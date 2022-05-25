@@ -1,4 +1,10 @@
-import type { Controller, ControllerRoute, ControllerMethod, ControllerVersion } from "./Controller";
+import type {
+	Controller,
+	ControllerRoute,
+	ControllerMethod,
+	ControllerVersion,
+	ControllerConstructor,
+} from "./Controller";
 
 export function makeMethodDecorator(method: ControllerMethod) {
 	return (route: ControllerRoute = "/", version?: ControllerVersion) =>
@@ -8,6 +14,14 @@ export function makeMethodDecorator(method: ControllerMethod) {
 
 			Reflect.defineMetadata("routes", routes, controller);
 		};
+}
+
+export interface ControllerRouteMetadata {
+	controller: ControllerConstructor;
+	version: ControllerVersion;
+	method: ControllerMethod;
+	route: ControllerRoute;
+	propertyKey: string;
 }
 
 export const Get = makeMethodDecorator("GET");
