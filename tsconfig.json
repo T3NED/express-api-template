@@ -52,6 +52,7 @@
 			"#lib/*": ["lib/*"],
 			"#middleware": ["middleware/index.ts"],
 			"#serializers": ["serializers/index.ts"],
+			"#services": ["services/index.ts"],
 			"#providers": ["providers/index.ts"],
 			"#utils": ["utils/index.ts"]
 		}

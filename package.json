@@ -49,6 +49,7 @@
 		"#struct": "dist/struct",
 		"#lib": "dist/lib",
 		"#middleware": "dist/middleware",
+		"#services": "dist/services",
 		"#providers": "dist/providers",
 		"#serializers": "dist/serializers",
 		"#utils": "dist/utils"
