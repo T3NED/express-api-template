@@ -1,7 +1,7 @@
-import type { Controller, ControllerOptions } from "./Controller";
+import type { ControllerConstructor, ControllerOptions } from "./Controller";
 
 export const controller = (options: Partial<ControllerOptions>): Function => {
-	return (Controller: ControllerConstructor<Controller>) => {
+	return (Controller: ControllerConstructor) => {
 		return class extends Controller {
 			public constructor() {
 				super(options);
@@ -9,5 +9,3 @@ export const controller = (options: Partial<ControllerOptions>): Function => {
 		};
 	};
 };
-
-export type ControllerConstructor<M extends Controller> = new (options: Partial<ControllerOptions>) => M;
