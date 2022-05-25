@@ -10,9 +10,24 @@ datasource db {
   url      = env("POSTGRES_URI")
 }
 
-model Example {
-  id BigInt @id
+model User {
+  id       BigInt @id @db.BigInt
+  username String @db.VarChar(12)
+  bio      String @db.VarChar(255)
+
+  Posts Post[] @relation("UserPost")
+
+  @@index([id, username])
+  @@map("users")
+}
+
+model Post {
+  id        BigInt @id @db.BigInt
+  creatorId BigInt @map("fk_creator_id") @db.BigInt
+  content   String @db.VarChar(255)
+
+  User User @relation("UserPost", fields: [creatorId], references: [id])
 
   @@index([id])
-  @@map("examples")
+  @@map("posts")
 }
