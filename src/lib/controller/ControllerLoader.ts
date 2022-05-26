@@ -18,12 +18,16 @@ export class ControllerLoader {
 	public constructor(private app: Express) {}
 
 	public async serve(): Promise<void> {
+		const startTime = performance.now();
+
 		this._applyPreloadMiddleware();
 
 		await this.loadAll();
 
 		this._applyPostloadMiddleware();
 		this._listen();
+
+		Logger.debug(`Loaded in ${(performance.now() - startTime).toFixed(2)} ms`);
 	}
 
 	private async loadAll(): Promise<void> {
