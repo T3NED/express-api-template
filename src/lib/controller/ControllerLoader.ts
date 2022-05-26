@@ -1,9 +1,9 @@
 import type { ControllerMiddleware, ControllerMiddlewareMetadata } from "./ControllerMiddleware";
 import type { ControllerValidateMetadata, ControllerValidationSchema } from "./ControllerValidation";
 import type { ControllerRouteMetadata } from "./ControllerMethods";
-import type { Controller, ControllerRunMethod } from "./Controller";
 
 import { unknownRoute, convertError, handleError } from "#middleware";
+import { Controller, ControllerRunMethod } from "./Controller";
 import express, { Express, Request } from "express";
 import { catchServerError, Logger } from "#utils";
 import { ApiError, ApiErrorCode } from "#struct";
@@ -33,13 +33,15 @@ export class ControllerLoader {
 
 		for await (const file of this._recursiveReaddir(path)) {
 			if (file.endsWith(".map")) continue;
-			await this._load(`${path}/${file}`);
+			await this._load(file);
 		}
+
+		Logger.info("Successfully loaded controllers");
 	}
 
 	private async _load(path: string): Promise<void> {
-		const mod = await import(path).catch(() => null);
-		if (!mod?.default) return;
+		const mod = await import(path).catch((error) => Logger.error(error, { error }));
+		if (!mod?.default || !(mod.default.prototype instanceof Controller)) return;
 
 		const controller = new mod.default(this) as Controller;
 
@@ -63,7 +65,13 @@ export class ControllerLoader {
 
 			const routeHandler = catchServerError(async (req, res) => {
 				const controllerRunMethod = Reflect.get(controller, propertyKey) as ControllerRunMethod;
-				const result = await controllerRunMethod.bind(controller)({ req, res });
+				const result = await controllerRunMethod.bind(controller)({
+					req,
+					res,
+					query: res.locals.query,
+					params: res.locals.params,
+					body: res.locals.body,
+				});
 
 				return res.status(result.status).send(result.data);
 			});
@@ -72,14 +80,12 @@ export class ControllerLoader {
 
 			Logger.debug(`Loaded ${method} ${fullRoute}`);
 		}
-
-		Logger.info("Successfully loaded controllers");
 	}
 
 	private async *_recursiveReaddir(path: string): AsyncIterableIterator<string> {
 		for (const file of await readdir(path, { withFileTypes: true })) {
 			if (file.isDirectory()) yield* this._recursiveReaddir(`${path}/${file.name}`);
-			else yield file.name;
+			else yield `${path}/${file.name}`;
 		}
 	}
 

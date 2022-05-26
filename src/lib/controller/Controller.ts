@@ -10,7 +10,7 @@ export abstract class Controller {
 		this.defaultVersion = options.defaultVersion ?? "v1";
 	}
 
-	protected json(data: ControllerJsonData, status = HttpStatus.Ok): ControllerData {
+	protected json(data: unknown, status = HttpStatus.Ok): ControllerData {
 		return { status, data };
 	}
 }
@@ -22,12 +22,15 @@ export interface ControllerOptions {
 
 export interface ControllerData {
 	status: HttpStatus;
-	data: ControllerJsonData;
+	data: unknown;
 }
 
 export interface ControllerContext {
 	req: Request;
 	res: Response;
+	query: unknown;
+	params: unknown;
+	body: unknown;
 }
 
 export type ControllerRoute = `/${string}`;
@@ -36,5 +39,3 @@ export type ControllerMethod = "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
 
 export type ControllerConstructor = new (options?: Partial<ControllerOptions>) => Controller;
 export type ControllerRunMethod = (context: ControllerContext) => Promise<ControllerData>;
-
-export type ControllerJsonData = Record<string | number, unknown> | ControllerJsonData[];
