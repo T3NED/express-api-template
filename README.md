@@ -21,7 +21,7 @@ project.
 We've built this project using minimal packages to cover everything an API should be able to do. Here's a list
 of the technologies used in the template:
 
-### Packages
+#### Packages
 
 -   Express (web framework)
 -   Winston (logger)
@@ -29,13 +29,13 @@ of the technologies used in the template:
 -   Prisma (database provider)
 -   Joi (validation)
 
-### Linting and Formatting
+#### Linting and Formatting
 
 -   Typescript
 -   Prettier
 -   ESLint
 
-### Tools
+#### Tools
 
 -   Redis
 -   PostgreSQL
