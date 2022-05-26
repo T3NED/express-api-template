@@ -17,7 +17,8 @@
 		"format": "npx prettier --write src",
 		"lint": "npx eslint src --ext js,ts --fix",
 		"build": "npx tsc -b .",
-		"start": "node dist/app.js"
+		"start": "node dist/app.js",
+		"dev": "npx ts-node-dev --respawn src/app.ts"
 	},
 	"dependencies": {
 		"@prisma/client": "^3.14.0",
