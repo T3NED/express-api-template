@@ -16,7 +16,7 @@ the template, which are much needed tools to aid the development of an organized
 reading the guide below before starting — so you have a valuable understanding of how to navigate around the
 project.
 
-# Technologies
+## Technologies
 
 We've built this project using minimal packages to cover everything an API should be able to do. Here's a list
 of the technologies used in the template:
@@ -42,7 +42,7 @@ of the technologies used in the template:
 -   Docker
 -   Docker Compose
 
-# Prerequisites
+## Prerequisites
 
 For development, you will need to:
 
