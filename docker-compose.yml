@@ -1,5 +1,28 @@
 version: "3.7"
 services:
+    postgres:
+        container_name: api-postgres
+        image: postgres
+        restart: always
+        env_file:
+            - .env
+        ports:
+            - ${POSTGRES_PORT}:5432
+        volumes:
+            - ${POSTGRES_PATH}/${APP_NAME}/${POSTGRES_DATABASE}/:/var/lib/postgresql/data
+        healthcheck:
+            test: ["CMD-SHELL", "pg_isready -U postgres"]
+            interval: 10s
+            timeout: 5s
+            retries: 10
+    redis:
+        container_name: api-redis
+        image: redis
+        restart: always
+        env_file:
+            - .env
+        ports:
+            - ${REDIS_PORT}:6379
     api:
         container_name: api
         image: api
@@ -7,11 +30,16 @@ services:
         env_file:
             - .env
         ports:
-            - ${APP_PORT}
+            - ${APP_PORT}:${APP_PORT}
         build:
             context: .
             dockerfile: Dockerfile
             args:
                 APP_NAME: ${APP_NAME}
         environment:
+            POSTGRES_URI: postgres://${POSTGRES_USERNAME}:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:5432/${POSTGRES_DATABASE}
+            REDIS_HOST: redis
+            REDIS_PORT: 6379
         depends_on:
+            - postgres
+            - redis
