@@ -1,12 +1,21 @@
-import type { CreateUserBody, UpdateUserParams, UpdateUserBody, DeleteUserParams } from "./validations";
+import type {
+	CreateUserBody,
+	UpdateUserParams,
+	UpdateUserBody,
+	DeleteUserParams,
+	GetUserByIdParams,
+	SearchUserByUsernameQuery,
+} from "./validations";
 
 import {
 	Controller,
 	ControllerData,
 	ControllerContext,
+	Get,
 	Post,
 	Patch,
 	Delete,
+	Query,
 	Params,
 	Body,
 	controller,
@@ -16,6 +25,7 @@ import { HttpStatus } from "#constants/http";
 import { UserService } from "#services";
 import { UserMapper } from "#mappers";
 import * as validation from "./validations";
+import { UnknownUser } from "#struct";
 
 @controller({
 	baseRoute: "/users",
@@ -66,5 +76,36 @@ export default class UserController extends Controller {
 		await UserService.delete(params.id);
 
 		return context.res.status(HttpStatus.NoContent).send();
+	}
+
+	/**
+	 * Search a user by username
+	 */
+	@Get("/search")
+	@Query(validation.searchUserByUsernameQuerySchema)
+	public async searchUserByUsername(context: ControllerContext) {
+		const query = context.query as SearchUserByUsernameQuery;
+
+		const users = await UserService.searchByUsername(query.username, {
+			limit: query.limit,
+			before: query.before,
+			after: query.after,
+		});
+
+		return this.json(users.map(UserMapper.map));
+	}
+
+	/**
+	 * Get a user by id
+	 */
+	@Get("/:id")
+	@Params(validation.getUserByIdParamsSchema)
+	public async getUserById(context: ControllerContext) {
+		const params = context.params as GetUserByIdParams;
+
+		const user = await UserService.getById(params.id);
+		if (!user) throw UnknownUser();
+
+		return this.json(UserMapper.map(user));
 	}
 }
