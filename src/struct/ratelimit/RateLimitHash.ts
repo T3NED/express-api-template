@@ -1,6 +1,6 @@
 import { sha1 } from "#utils";
 
-const methods: RateLimitMethod[] = ["get", "post", "put", "patch", "delete"];
+const methods: RateLimitMethod[] = ["get", "post", "put", "patch", "delete", "all"];
 
 const isMethod = (value: string): value is RateLimitMethod => {
 	return methods.includes(value as RateLimitMethod);
@@ -16,7 +16,7 @@ export const ratelimit = (base = "ratelimit"): RateLimitHashRoute => {
 	}) as unknown as RateLimitHashRoute;
 };
 
-export type RateLimitMethod = "get" | "post" | "put" | "patch" | "delete";
+export type RateLimitMethod = "get" | "post" | "put" | "patch" | "delete" | "all";
 export type RateLimitRouteMethod = Record<RateLimitMethod, string>;
 export type RateLimitRoute = { [key: string]: RateLimitHashRoute; (arg: unknown): RateLimitHashRoute };
 export type RateLimitHashRoute = RateLimitRouteMethod & RateLimitRoute;
