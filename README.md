@@ -16,6 +16,46 @@ the template, which are much needed tools to aid the development of an organized
 reading the guide below before starting — so you have a valuable understanding of how to navigate around the
 project.
 
+# Technologies
+
+We've built this project using minimal packages to cover everything an API should be able to do. Here's a list
+of the technologies used in the template:
+
+### Packages
+
+-   Express (web framework)
+-   Winston (logger)
+-   IORedis (redis provider)
+-   Prisma (database provider)
+-   Joi (validation)
+
+### Linting and Formatting
+
+-   Typescript
+-   Prettier
+-   ESLint
+
+### Tools
+
+-   Redis
+-   PostgreSQL
+-   Docker
+-   Docker Compose
+
+# Prerequisites
+
+For development, you will need to:
+
+-   Install [NodeJS](https://nodejs.org/en/download/)
+-   Install [Pnpm](https://pnpm.io/installation)
+-   Install [Redis](https://redis.io/docs/getting-started/installation/)
+-   Install [PostgreSQL](https://www.postgresql.org/download/)
+
+For production and optionally for development, you need to:
+
+-   Install [Docker](https://docs.docker.com/get-docker/)
+-   Install [Docker Compose](https://docs.docker.com/compose/install/)
+
 ## Getting Started
 
 -   📂 [Project Structure](docs/project-structure.md)
