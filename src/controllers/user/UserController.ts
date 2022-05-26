@@ -24,8 +24,8 @@ import {
 import { HttpStatus } from "#constants/http";
 import { UserService } from "#services";
 import { UserMapper } from "#mappers";
-import * as validation from "./validations";
 import { UnknownUser } from "#struct";
+import * as validation from "./validations";
 
 @controller({
 	baseRoute: "/users",
