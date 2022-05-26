@@ -5,11 +5,21 @@ import "reflect-metadata";
 import { Logger } from "#utils";
 
 process.on("uncaughtException", (error) => {
-	Logger.error(error?.message, { error });
+	Logger.error(error?.message, {
+		error: {
+			message: error.message,
+			stack: error.stack,
+		},
+	});
 });
 
 process.on("unhandledRejection", (error: Error) => {
-	Logger.error(error?.message, { error });
+	Logger.error(error?.message, {
+		error: {
+			message: error.message,
+			stack: error.stack,
+		},
+	});
 });
 
 process.on("SIGINT", () => {

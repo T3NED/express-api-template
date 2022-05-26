@@ -40,7 +40,15 @@ export class ControllerLoader {
 	}
 
 	private async _load(path: string): Promise<void> {
-		const mod = await import(path).catch((error) => Logger.error(error, { error }));
+		const mod = await import(path).catch((error) =>
+			Logger.error(error, {
+				error: {
+					message: error.message,
+					stack: error.stack,
+				},
+			}),
+		);
+
 		if (!mod?.default || !(mod.default.prototype instanceof Controller)) return;
 
 		const controller = new mod.default(this) as Controller;

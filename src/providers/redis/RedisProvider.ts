@@ -16,7 +16,14 @@ export class RedisProvider {
 		});
 
 		client.on("connect", () => Logger.info("Connected to redis"));
-		client.on("error", (error) => Logger.error(error));
+		client.on("error", (error) =>
+			Logger.error(error, {
+				error: {
+					message: error?.message,
+					stack: error?.stack,
+				},
+			}),
+		);
 
 		this.#client = client;
 	}
