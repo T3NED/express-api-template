@@ -54,6 +54,7 @@
 			"#serializers": ["serializers/index.ts"],
 			"#services": ["services/index.ts"],
 			"#providers": ["providers/index.ts"],
+			"#mappers": ["mappers/index.ts"],
 			"#utils": ["utils/index.ts"]
 		}
 	},

@@ -52,6 +52,7 @@
 		"#services": "dist/services",
 		"#providers": "dist/providers",
 		"#serializers": "dist/serializers",
+		"#mappers": "dist/mappers",
 		"#utils": "dist/utils"
 	}
 }
