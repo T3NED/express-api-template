@@ -1,9 +1,13 @@
 import type { User } from "@prisma/client";
-import { ServiceSnowflake } from "#utils";
+
+import { UsernameAlreadyInUseError } from "#struct";
 import { Database } from "#providers";
+import { ServiceSnowflake } from "#utils";
 
 export class UserService {
 	public static async create(data: CreateUserData): Promise<User> {
+		await this._checkUniqueUsername(data.username);
+
 		return Database.get().user.create({
 			data: {
 				id: ServiceSnowflake.generate(),
@@ -12,7 +16,11 @@ export class UserService {
 		});
 	}
 
-	public static update(id: bigint, data: UpdateUserData): Promise<User> {
+	public static async update(id: bigint, data: UpdateUserData): Promise<User> {
+		if (data.username) {
+			await this._checkUniqueUsername(data.username, id);
+		}
+
 		return Database.get().user.update({
 			where: {
 				id,
@@ -68,6 +76,15 @@ export class UserService {
 			},
 			take: data.limit,
 		});
+	}
+
+	private static async _checkUniqueUsername(username: string, userId?: bigint): Promise<void> {
+		const existingUserWithUsername = await this.getByUsername(username);
+
+		if (!existingUserWithUsername) return;
+		if (userId && existingUserWithUsername.id === userId) return;
+
+		throw UsernameAlreadyInUseError();
 	}
 }
 
