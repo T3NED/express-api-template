@@ -32,4 +32,6 @@ export enum HttpHeader {
 	RateLimitRemaining = "X-RateLimit-Remaining",
 	RateLimitReset = "X-RateLimit-Reset",
 	RateLimitRetryAfter = "X-RateLimit-RetryAfter",
+
+	RealIp = "X-Real-IP",
 }

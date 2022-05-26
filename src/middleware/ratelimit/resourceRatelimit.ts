@@ -4,9 +4,9 @@ import { HttpHeader } from "#constants/http";
 import { catchServerError } from "#utils";
 
 export const resourceRatelimit = (ratelimit: RateLimit) => {
-	return catchServerError(async (_req: Request, res: Response, next: NextFunction): Promise<void> => {
-		const sessionId = res.locals.session.id;
-		const consumedToken = await RateLimiter.consume(ratelimit, sessionId);
+	return catchServerError(async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+		const requesterId = HttpHeader.RealIp ?? req.ip; // change this if authorization is implemented
+		const consumedToken = await RateLimiter.consume(ratelimit, requesterId);
 
 		res.setHeader(HttpHeader.RateLimitBucket, consumedToken.hash);
 		res.setHeader(HttpHeader.RateLimitLimit, ratelimit.bucket.limit);
