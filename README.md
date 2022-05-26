@@ -58,6 +58,7 @@ For production and optionally for development, you need to:
 
 ## Getting Started
 
+-   ✨ [Clone Template](docs/clone-template.md)
 -   📂 [Project Structure](docs/project-structure.md)
 -   ⚙ [Config & Constants](docs/config-and-constants.md)
 -   💎 [General Utilities](docs/general-utilities.md)
@@ -66,3 +67,4 @@ For production and optionally for development, you need to:
 -   ⚡ [Middleware](docs/middleware.md)
 -   ✅ [Validation](docs/validation.md)
 -   🦾 [Mappers & Serializers](docs/mappers-and-serializers.md)
+-   🛑 [Ratelimiting](docs/ratelimiting.md)
