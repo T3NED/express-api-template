@@ -19,6 +19,7 @@ import {
 	Params,
 	Body,
 	controller,
+	RateLimit,
 } from "#lib/controller";
 
 import { HttpStatus } from "#constants/http";
@@ -26,6 +27,7 @@ import { UserService } from "#services";
 import { UserMapper } from "#mappers";
 import { UnknownUser } from "#struct";
 import * as validation from "./validations";
+import * as ratelimits from "./ratelimits";
 
 @controller({
 	baseRoute: "/users",
@@ -36,6 +38,7 @@ export default class UserController extends Controller {
 	 * Create a user
 	 */
 	@Post("/")
+	@RateLimit(ratelimits.createUser)
 	@Body(validation.createUserBodySchema)
 	public async createUser(context: ControllerContext): Promise<ControllerData> {
 		const body = context.body as CreateUserBody;
