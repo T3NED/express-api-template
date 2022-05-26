@@ -16,8 +16,9 @@
 	"scripts": {
 		"format": "npx prettier --write src",
 		"lint": "npx eslint src --ext js,ts --fix",
-		"build": "npx tsc -b .",
+		"build": "npx prisma generate && npx tsc -b .",
 		"start": "node dist/app.js",
+		"migrate": "npx prisma migrate deploy",
 		"dev": "npx ts-node-dev --respawn src/app.ts"
 	},
 	"dependencies": {
