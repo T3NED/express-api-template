@@ -4,3 +4,4 @@ export * from "./ControllerMethods";
 export * from "./ControllerLoader";
 export * from "./ControllerMiddleware";
 export * from "./ControllerValidation";
+export * from "./ControllerRatelimit";
