@@ -1,8 +1,9 @@
 import type { ControllerMiddleware, ControllerMiddlewareMetadata } from "./ControllerMiddleware";
 import type { ControllerValidateMetadata, ControllerValidationSchema } from "./ControllerValidation";
+import type { ControllerRatelimitMetadata } from "./ControllerRatelimit";
 import type { ControllerRouteMetadata } from "./ControllerMethods";
 
-import { unknownRoute, convertError, handleError } from "#middleware";
+import { unknownRoute, convertError, handleError, resourceRatelimit } from "#middleware";
 import { Controller, ControllerRunMethod } from "./Controller";
 import express, { Express, Request } from "express";
 import { catchServerError, Logger } from "#utils";
@@ -60,8 +61,10 @@ export class ControllerLoader {
 		const routes = Reflect.getMetadata("routes", controller) as ControllerRouteMetadata[];
 		const middleware = Reflect.getMetadata("middleware", controller) as ControllerMiddlewareMetadata[];
 		const validation = Reflect.getMetadata("validation", controller) as ControllerValidateMetadata[];
+		const ratelimits = Reflect.getMetadata("ratelimits", controller) as ControllerRatelimitMetadata[];
 
 		const runMethodToMiddlewareMap = this._getRunMethodToMiddlewareMap(middleware);
+		const runMethodToRateLimitMap = this._getRunMethodToRateLimitMap(ratelimits);
 		const validationSchema = this._getValidationSchemaMap(validation);
 
 		for (const { version, method, route, propertyKey } of routes) {
@@ -71,6 +74,8 @@ export class ControllerLoader {
 
 			const routerMethod = Reflect.get(this.app, method.toString().toLowerCase());
 			const routerMiddleware = runMethodToMiddlewareMap[propertyKey] ?? [];
+
+			const ratelimitMiddleware = runMethodToRateLimitMap[propertyKey] ?? [];
 
 			const validationMiddlewareSchema = validationSchema[propertyKey];
 			const validationMiddleware = this._getValidationSchemaMiddleware(validationMiddlewareSchema);
@@ -88,7 +93,13 @@ export class ControllerLoader {
 				return res.status(result.status).send(result.data);
 			});
 
-			routerMethod.bind(this.app)(fullRoute, ...routerMiddleware, validationMiddleware, routeHandler);
+			routerMethod.bind(this.app)(
+				fullRoute,
+				...ratelimitMiddleware,
+				...routerMiddleware,
+				validationMiddleware,
+				routeHandler,
+			);
 
 			Logger.debug(`Loaded ${method} ${fullRoute}`);
 		}
@@ -107,6 +118,16 @@ export class ControllerLoader {
 		return middleware.reduce((map, curr) => {
 			if (!map[curr.propertyKey]) map[curr.propertyKey] = [];
 			map[curr.propertyKey].push(curr.func);
+			return map;
+		}, {} as Record<string, ControllerMiddleware[]>);
+	}
+
+	private _getRunMethodToRateLimitMap(
+		ratelimits: ControllerRatelimitMetadata[] = [],
+	): Record<string, ControllerMiddleware[]> {
+		return ratelimits.reduce((map, curr) => {
+			if (!map[curr.propertyKey]) map[curr.propertyKey] = [];
+			map[curr.propertyKey].push(resourceRatelimit(curr.ratelimit));
 			return map;
 		}, {} as Record<string, ControllerMiddleware[]>);
 	}
