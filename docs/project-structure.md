@@ -97,4 +97,4 @@ your responses to implicity state what should be included in your response.
 
 Utils contains the common utilities such as functions or shared types used throughout the project.
 
-**[▶ Next Section: Config & Constants](project-structure.md)**
+**[▶ Next Section: Config & Constants](config-and-constants.md)**
