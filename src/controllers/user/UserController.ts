@@ -1,4 +1,4 @@
-import type { CreateUserBody, UpdateUserParams, UpdateUserBody } from "./validations";
+import type { CreateUserBody, UpdateUserParams, UpdateUserBody, DeleteUserParams } from "./validations";
 
 import {
 	Controller,
@@ -6,14 +6,16 @@ import {
 	ControllerContext,
 	Post,
 	Patch,
+	Delete,
 	Params,
 	Body,
 	controller,
 } from "#lib/controller";
 
+import { HttpStatus } from "#constants/http";
 import { UserService } from "#services";
-import * as validation from "./validations";
 import { UserMapper } from "#mappers";
+import * as validation from "./validations";
 
 @controller({
 	baseRoute: "/users",
@@ -51,5 +53,18 @@ export default class UserController extends Controller {
 		});
 
 		return this.json(UserMapper.map(user));
+	}
+
+	/**
+	 * Delete a user
+	 */
+	@Delete("/:id")
+	@Params(validation.deleteUserParamsSchema)
+	public async deleteUser(context: ControllerContext) {
+		const params = context.params as DeleteUserParams;
+
+		await UserService.delete(params.id);
+
+		return context.res.status(HttpStatus.NoContent).send();
 	}
 }
