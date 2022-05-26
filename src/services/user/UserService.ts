@@ -61,6 +61,7 @@ export class UserService {
 			where: {
 				username: {
 					startsWith: username,
+					mode: "insensitive",
 				},
 				id: {
 					lt: data.before,
