@@ -7,6 +7,7 @@ export enum ApiErrorCode {
 
 	// Unknown resources
 	UnknownRoute = 40_000,
+	UnknownUser,
 
 	// Server validation errors
 	UsernameInUse = 50_001,
