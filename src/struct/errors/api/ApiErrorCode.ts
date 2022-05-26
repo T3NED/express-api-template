@@ -9,5 +9,5 @@ export enum ApiErrorCode {
 	UnknownRoute = 40_000,
 
 	// Server validation errors
-	UsernameInUse = 50_000,
+	UsernameInUse = 50_001,
 }
