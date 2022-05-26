@@ -55,6 +55,7 @@
 			"#services": ["services/index.ts"],
 			"#providers": ["providers/index.ts"],
 			"#mappers": ["mappers/index.ts"],
+			"#validations": ["validations/index.ts"],
 			"#utils": ["utils/index.ts"]
 		}
 	},
