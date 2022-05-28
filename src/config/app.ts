@@ -1,8 +1,6 @@
 import { env, envInteger, envPossibles } from "#lib/env";
 import { environments } from "#constants/app";
 
-const name = env("APP_NAME", true);
-const port = envInteger("APP_PORT", true, 3000);
-const environment = envPossibles("APP_ENV", environments, "local");
-
-export { name, port, environment };
+export const name = env("APP_NAME", true);
+export const port = envInteger("APP_PORT", true, 3000);
+export const environment = envPossibles("APP_ENV", environments, "local");
