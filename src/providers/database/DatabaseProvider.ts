@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { AppEnv } from "#constants/app";
 import { uri } from "#config/database";
+import { is } from "#constants/app";
 import { Logger } from "#utils";
+import * as middleware from "./middleware";
 
 export class DatabaseProvider {
 	static #instance: DatabaseProvider;
@@ -28,18 +29,7 @@ export class DatabaseProvider {
 			],
 		});
 
-		if (process.env.APP_ENV === AppEnv.Development) {
-			client.$use(async (params, next) => {
-				const startTime = performance.now();
-				const result = await next(params);
-				const timeTook = performance.now() - startTime;
-
-				Logger.info(`Query ${params.model}.${params.action} took ${timeTook}ms`);
-
-				return result;
-			});
-		}
-
+		if (is.development) client.$use(middleware.queryTime);
 		client.$on("info", (data) => Logger.info(data.message));
 		client.$on("warn", (data) => Logger.warn(data.message));
 		client.$on("error", (data) => Logger.error(data.message));
