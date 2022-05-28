@@ -1,5 +1,3 @@
-import { environment } from "#config/app";
-
 export enum AppEnv {
 	Production = "production",
 	Development = "development",
@@ -8,10 +6,10 @@ export enum AppEnv {
 }
 
 export const is = {
-	production: AppEnv.Production === environment,
-	development: AppEnv.Development === environment,
-	staging: AppEnv.Staging === environment,
-	local: AppEnv.Local === environment,
+	production: AppEnv.Production === process.env.APP_ENV,
+	development: AppEnv.Development === process.env.APP_ENV,
+	staging: AppEnv.Staging === process.env.APP_ENV,
+	local: AppEnv.Local === process.env.APP_ENV,
 };
 
 export const environments = [AppEnv.Production, AppEnv.Development, AppEnv.Staging, AppEnv.Local];
