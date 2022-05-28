@@ -12,7 +12,6 @@
 	},
 	"extends": ["plugin:@typescript-eslint/recommended", "plugin:prettier/recommended"],
 	"rules": {
-		"quotes": ["error", "double"],
 		"semi": ["error", "always"],
 		"complexity": "warn",
 		"camelcase": "off",
@@ -20,6 +19,7 @@
 		"accessor-pairs": "warn",
 		"max-len": ["error", 110, 2],
 		"eol-last": "error",
+		"quotes": ["off", "double"],
 		"prettier/prettier": [2, { "useTabs": true }],
 		"@typescript-eslint/ban-types": "off",
 		"@typescript-eslint/no-explicit-any": "error",
