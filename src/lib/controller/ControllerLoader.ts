@@ -10,7 +10,7 @@ import { catchServerError, Logger } from "#utils";
 import { ApiError, ApiErrorCode } from "#struct";
 import { HttpStatus } from "#constants/http";
 import { readdir } from "fs/promises";
-import { port } from "#config/app";
+import { config } from "#lib/config";
 import { join } from "path";
 import cors from "cors";
 import Joi from "joi";
@@ -203,8 +203,8 @@ export class ControllerLoader {
 	private _listen(): void {
 		Logger.debug("Starting server...");
 
-		this.app.listen(port, "0.0.0.0", () => {
-			Logger.info(`Serving on http://localhost:${port}`);
+		this.app.listen(config("app.port"), "0.0.0.0", () => {
+			Logger.info(`Serving on http://localhost:${config("app.port")}`);
 		});
 	}
 }

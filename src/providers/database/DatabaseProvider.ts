@@ -1,7 +1,8 @@
 import { PrismaClient } from "@prisma/client";
-import { uri } from "#config/database";
+import { config } from "#lib/config";
 import { is } from "#constants/app";
 import { Logger } from "#utils";
+
 import * as middleware from "./middleware";
 
 export class DatabaseProvider {
@@ -14,7 +15,7 @@ export class DatabaseProvider {
 		const client = new PrismaClient({
 			datasources: {
 				db: {
-					url: uri,
+					url: config("database.uri"),
 				},
 			},
 			errorFormat: "pretty",
