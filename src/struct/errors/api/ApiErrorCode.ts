@@ -13,10 +13,11 @@ export enum ApiErrorCode {
 	BadGateway = 0,
 	ServiceUnavailable = 0,
 
-	// Unknown resources
+	// Client errors
 	UnknownRoute = 40_000,
 	UnknownUser,
 
-	// Server validation errors
-	UsernameInUse = 50_001,
+	UsernameInUse = 40_100,
+
+	// Server errors
 }
